@@ -13,7 +13,8 @@ const addBook = () => {
   const bookFormTitle = document.getElementById("bookFormTitle").value;
   const bookFormAuthor = document.getElementById("bookFormAuthor").value;
   const bookFormYear = document.getElementById("bookFormYear").value;
-  const bookFormIsComplete = document.getElementById("bookFormIsComplete").checked;
+  const bookFormIsComplete =
+    document.getElementById("bookFormIsComplete").checked;
 
   const bookObject = {
     id: generateID,
@@ -63,31 +64,41 @@ const makeBook = (bookObject) => {
   container.append(textTitle, textAuthor, textYear, buttonContainer);
 
   console.log(container);
-  
-  if(isCompleted === false) {
-      deleteButton.addEventListener('click', (event) => {
-      event.preventDefault()
-      isCompleteBook(isCompleted)
-    })
-  } else {
-     console.log("False")
+
+  if (isCompleted === false) {
+    isCompleteButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      isCompleteBook(isCompleted);
+    });
   }
+
+  deleteButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    deleteBook(id);
+  });
 
   return container;
 };
 
- const isCompleteBook = (isCompleted) => {
-   isCompleted = true
-   document.dispatchEvent(new Event(RENDER_EVENT))
- }
+const isCompleteBook = (isCompleted) => {
+  for (bookItem of book) {
+    if (bookItem.isCompleted === isCompleted) {
+      bookItem.isCompleted = true;
+    }
+  }
+  document.dispatchEvent(new Event(RENDER_EVENT));
+};
 
- const deleteBook = () => {
+const deleteBook = (id) => {
+  for (index in book) {
+    if (bookItem.id === id) {
+      book.splice(index, 1)
+    }
+  }
+  document.dispatchEvent(new Event(RENDER_EVENT));
+};
 
- }
-
- const editBook = () => {
-
- }
+const editBook = () => {};
 
 // const findBook = (bookId) => {
 //   return book.find((bookItem) => bookItem.id === bookId) || null;
