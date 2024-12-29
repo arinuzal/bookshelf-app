@@ -45,11 +45,14 @@ const makeBook = (bookObject) => {
 
   const isCompleteButton = document.createElement("button");
   isCompleteButton.setAttribute("data-testid", "bookItemIsCompleteButton");
-  isCompleteButton.innerText = "Selesai dibaca";
 
   const deleteButton = document.createElement("button");
   deleteButton.setAttribute("data-testid", "bookIteDeleteButton");
   deleteButton.innerText = "Hapus buku";
+
+  const searchBookInput = document.getElementById('searchBookTitle').value;
+  console.log(searchBookInput)
+  const searchSubmit = document.getElementById('searchSubmit');
 
   const editButton = document.createElement("button");
   editButton.setAttribute("data-testid", "bookItemEditButton");
@@ -66,11 +69,13 @@ const makeBook = (bookObject) => {
   console.log(container);
 
   if (isCompleted === false) {
+    isCompleteButton.innerText = "Selesai dibaca";
     isCompleteButton.addEventListener("click", (event) => {
       event.preventDefault();
       isCompleteBook(id);
     });
   } else {
+    isCompleteButton.innerText = "Belum selesai dibaca";
     isCompleteButton.addEventListener("click", (event) => {
       event.preventDefault();
       isNotCompleteBook(id);
@@ -80,6 +85,11 @@ const makeBook = (bookObject) => {
   deleteButton.addEventListener("click", (event) => {
     event.preventDefault();
     deleteBook(id);
+  });
+
+  searchSubmit.addEventListener("click", (event) => {
+    event.preventDefault();
+    searchBook(searchBookInput);
   });
 
   editButton.addEventListener("click", (event) => {
@@ -95,35 +105,54 @@ const findBook = (bookId) => {
 };
 
 const isCompleteBook = (bookId) => {
-  const findIdBook = findBook(bookId) 
-    if (findIdBook.id === bookId) {
-      bookItem.isCompleted = true;
-    }
+  const findIdBook = findBook(bookId);
+  if (findIdBook.id === bookId) {
+    bookItem.isCompleted = true;
+  }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
 const isNotCompleteBook = (bookId) => {
-  const findIdBook = findBook(bookId) 
-    if (findIdBook.id === bookId) {
-      bookItem.isCompleted = false;
-    }
+  const findIdBook = findBook(bookId);
+  if (findIdBook.id === bookId) {
+    bookItem.isCompleted = false;
+  }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
 const deleteBook = (bookId) => {
   for (index in book) {
     if (bookItem.id === bookId) {
-      book.splice(index, 1)
+      book.splice(index, 1);
     }
   }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
+const searchBook = (searchBookInput) => {
+  const searchBookList = document.getElementById('searchBook')
+  searchBookList.innerText = "";
+
+  const searchResult = book.filter((bookItem) => {
+    bookItem.title.toLowerCase().includes(searchBookInput.toLowerCase())
+  });
+
+  if (searchResult.length > 0) {
+     for (const result of searchResult) {
+      const resultElement = makeBook(result);
+      searchBookList.append(resultElement)
+     }
+  } else {
+    const noResultMessage = document.createElement("p");
+    noResultMessage.innerText = "Buku tidak ditemukan.";
+    searchBookList.append(noResultMessage);
+  }
+};
+
 const editBook = (bookId) => {
-  for (bookItem of book) {
-    if (bookItem.id === bookId) {
-      return bookItem
-    }
+  const findIdBook = findBook(bookId);
+  if (findIdBook.id === bookId) {
+    return findIdBook;
   }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
