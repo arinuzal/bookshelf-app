@@ -68,7 +68,12 @@ const makeBook = (bookObject) => {
   if (isCompleted === false) {
     isCompleteButton.addEventListener("click", (event) => {
       event.preventDefault();
-      isCompleteBook(isCompleted);
+      isCompleteBook(id);
+    });
+  } else {
+    isCompleteButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      isNotCompleteBook(id);
     });
   }
 
@@ -77,32 +82,51 @@ const makeBook = (bookObject) => {
     deleteBook(id);
   });
 
+  editButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    editBook(id);
+  });
+
   return container;
 };
 
-const isCompleteBook = (isCompleted) => {
-  for (bookItem of book) {
-    if (bookItem.isCompleted === isCompleted) {
+const findBook = (bookId) => {
+  return book.find((bookItem) => bookItem.id === bookId) || null;
+};
+
+const isCompleteBook = (bookId) => {
+  const findIdBook = findBook(bookId) 
+    if (findIdBook.id === bookId) {
       bookItem.isCompleted = true;
     }
-  }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
-const deleteBook = (id) => {
+const isNotCompleteBook = (bookId) => {
+  const findIdBook = findBook(bookId) 
+    if (findIdBook.id === bookId) {
+      bookItem.isCompleted = false;
+    }
+  document.dispatchEvent(new Event(RENDER_EVENT));
+};
+
+const deleteBook = (bookId) => {
   for (index in book) {
-    if (bookItem.id === id) {
+    if (bookItem.id === bookId) {
       book.splice(index, 1)
     }
   }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
-const editBook = () => {};
-
-// const findBook = (bookId) => {
-//   return book.find((bookItem) => bookItem.id === bookId) || null;
-// };
+const editBook = (bookId) => {
+  for (bookItem of book) {
+    if (bookItem.id === bookId) {
+      return bookItem
+    }
+  }
+  document.dispatchEvent(new Event(RENDER_EVENT));
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   const submitForm = document.getElementById("bookForm");
