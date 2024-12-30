@@ -50,10 +50,6 @@ const makeBook = (bookObject) => {
   deleteButton.setAttribute("data-testid", "bookIteDeleteButton");
   deleteButton.innerText = "Hapus buku";
 
-  const searchBookInput = document.getElementById('searchBookTitle').value;
-  console.log(searchBookInput)
-  const searchSubmit = document.getElementById('searchSubmit');
-
   const editButton = document.createElement("button");
   editButton.setAttribute("data-testid", "bookItemEditButton");
   editButton.innerText = "Edit buku";
@@ -85,11 +81,6 @@ const makeBook = (bookObject) => {
   deleteButton.addEventListener("click", (event) => {
     event.preventDefault();
     deleteBook(id);
-  });
-
-  searchSubmit.addEventListener("click", (event) => {
-    event.preventDefault();
-    searchBook(searchBookInput);
   });
 
   editButton.addEventListener("click", (event) => {
@@ -129,19 +120,19 @@ const deleteBook = (bookId) => {
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
-const searchBook = (searchBookInput) => {
-  const searchBookList = document.getElementById('searchBook')
+const searchBookList = (searchBookInput) => {
+  const searchBookList = document.getElementById("searchBook");
   searchBookList.innerText = "";
 
   const searchResult = book.filter((bookItem) => {
-    bookItem.title.toLowerCase().includes(searchBookInput.toLowerCase())
+    bookItem.title.toLowerCase().includes(searchBookInput.toLowerCase());
   });
 
-  if (searchResult.length > 0) {
-     for (const result of searchResult) {
+  if (searchResult) {
+    for (const result of searchResult) {
       const resultElement = makeBook(result);
-      searchBookList.append(resultElement)
-     }
+      searchBookList.append(resultElement);
+    }
   } else {
     const noResultMessage = document.createElement("p");
     noResultMessage.innerText = "Buku tidak ditemukan.";
@@ -159,10 +150,17 @@ const editBook = (bookId) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const submitForm = document.getElementById("bookForm");
+  const searchBookInput = document.getElementById("searchBookTitle").value;
+  const searchSubmit = document.getElementById("searchSubmit");
 
   submitForm.addEventListener("submit", (event) => {
     event.preventDefault();
     addBook();
+  });
+
+  searchSubmit.addEventListener("click", (event) => {
+    event.preventDefault();
+    searchBookList(searchBookInput);
   });
 });
 
