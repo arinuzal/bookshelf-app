@@ -98,7 +98,7 @@ const findBook = (bookId) => {
 const isCompleteBook = (bookId) => {
   const findIdBook = findBook(bookId);
   if (findIdBook.id === bookId) {
-    bookItem.isCompleted = true;
+    findIdBook.isCompleted = true;
   }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
@@ -106,7 +106,7 @@ const isCompleteBook = (bookId) => {
 const isNotCompleteBook = (bookId) => {
   const findIdBook = findBook(bookId);
   if (findIdBook.id === bookId) {
-    bookItem.isCompleted = false;
+    findIdBook.isCompleted = false;
   }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
