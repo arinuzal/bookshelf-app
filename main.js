@@ -120,15 +120,19 @@ const deleteBook = (bookId) => {
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
-const searchBookList = (searchBookInput) => {
+const searchBookList = () => {
   const searchBookList = document.getElementById("searchBook");
+  const searchBookInput = document.getElementById("searchBookTitle").value;
+
   searchBookList.innerText = "";
 
+  console.log(`Input Search: ${searchBookInput}`)
+
   const searchResult = book.filter((bookItem) => {
-    bookItem.title.toLowerCase().includes(searchBookInput.toLowerCase());
+     return bookItem.title.toLowerCase().includes(searchBookInput.toLowerCase());
   });
 
-  if (searchResult) {
+  if (searchResult.length > 0) {
     for (const result of searchResult) {
       const resultElement = makeBook(result);
       searchBookList.append(resultElement);
@@ -150,7 +154,6 @@ const editBook = (bookId) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const submitForm = document.getElementById("bookForm");
-  const searchBookInput = document.getElementById("searchBookTitle").value;
   const searchSubmit = document.getElementById("searchSubmit");
 
   submitForm.addEventListener("submit", (event) => {
@@ -160,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   searchSubmit.addEventListener("click", (event) => {
     event.preventDefault();
-    searchBookList(searchBookInput);
+    searchBookList();
   });
 });
 
