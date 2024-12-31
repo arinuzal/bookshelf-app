@@ -112,24 +112,25 @@ const isNotCompleteBook = (bookId) => {
 };
 
 const deleteBook = (bookId) => {
-  for (index in book) {
-    if (bookItem.id === bookId) {
-      book.splice(index, 1);
-    }
+  const bookIndex = book.findIndex((bookItem) => bookItem.id === bookId);
+  if (bookIndex !== -1) {
+    book.splice(bookIndex, 1);
+    document.dispatchEvent(new Event(RENDER_EVENT));
   }
-  document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
 const searchBookList = () => {
   const searchBookList = document.getElementById("searchBook");
-  const searchBookInput = document.getElementById("searchBookTitle").value;
+  const searchBookInput = document.getElementById("searchBookTitle");
 
-  searchBookList.innerText = "";
+  searchBookInput.value = "";
 
-  console.log(`Input Search: ${searchBookInput}`)
+  console.log(`Input Search: ${searchBookInput.value}`);
 
   const searchResult = book.filter((bookItem) => {
-     return bookItem.title.toLowerCase().includes(searchBookInput.toLowerCase());
+    return bookItem.title
+      .toLowerCase()
+      .includes(searchBookInput.value.toLowerCase());
   });
 
   if (searchResult.length > 0) {
@@ -142,14 +143,20 @@ const searchBookList = () => {
     noResultMessage.innerText = "Buku tidak ditemukan.";
     searchBookList.append(noResultMessage);
   }
+  document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
 const editBook = (bookId) => {
   const findIdBook = findBook(bookId);
-  if (findIdBook.id === bookId) {
-    return findIdBook;
+  if (findIdBook) {
+    document.getElementById("bookFormTitle").value = findIdBook.title;
+    document.getElementById("bookFormAuthor").value = findIdBook.author;
+    document.getElementById("bookFormYear").value = findIdBook.year;
+    document.getElementById("bookFormIsComplete").checked =
+      findIdBook.isCompleted;
+
+    deleteBook(bookId);
   }
-  document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
 document.addEventListener("DOMContentLoaded", () => {
