@@ -117,6 +117,14 @@ const deleteBook = (bookId) => {
   }
 };
 
+const editBook = (bookId) => {
+  const bookIndex = book.findIndex((bookItem) => bookItem.id === bookId);
+  if (bookIndex !== -1) {
+    book.splice(bookIndex, 1);
+    document.dispatchEvent(new Event(RENDER_EVENT));
+  }
+};
+
 const searchBookList = () => {
   const searchBookList = document.getElementById("searchBook");
   const searchBookInput = document.getElementById("searchBookTitle");
@@ -127,8 +135,6 @@ const searchBookList = () => {
   incompleteBookList.innerHTML = "";
   completeBookList.innerHTML = "";
   searchBookInput.value = "";
-
-  console.log(`Input Search: ${searchQuery}`);
 
   const searchBook = book.filter((bookItem) => {
     return bookItem.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -154,6 +160,11 @@ const searchBookList = () => {
 document.addEventListener("DOMContentLoaded", () => {
   const submitForm = document.getElementById("bookForm");
   const searchSubmit = document.getElementById("searchSubmit");
+  const incompleteBookList = document.getElementById("incompleteBookList");
+  const completeBookList = document.getElementById("completeBookList");
+
+  incompleteBookList.innerHTML = "";
+  completeBookList.innerHTML = "";
 
   submitForm.addEventListener("submit", (event) => {
     event.preventDefault();
