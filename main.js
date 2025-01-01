@@ -10,11 +10,20 @@ const generateId = () => {
 
 const addBook = () => {
   const generateID = generateId();
-  const bookFormTitle = document.getElementById("bookFormTitle").value;
-  const bookFormAuthor = document.getElementById("bookFormAuthor").value;
-  const bookFormYear = document.getElementById("bookFormYear").value;
-  const bookFormIsComplete =
-    document.getElementById("bookFormIsComplete").checked;
+  const bookFormTitleInput = document.getElementById("bookFormTitle");
+  const bookFormAuthorInput = document.getElementById("bookFormAuthor");
+  const bookFormYearInput = document.getElementById("bookFormYear");
+  const bookFormIsCompleteInput = document.getElementById("bookFormIsComplete");
+
+  const bookFormTitle = bookFormTitleInput.value;
+  const bookFormAuthor = bookFormAuthorInput.value;
+  const bookFormYear = bookFormYearInput.value;
+  const bookFormIsComplete = bookFormIsCompleteInput.checked;
+
+  bookFormTitleInput.value = "";
+  bookFormAuthorInput.value = "";
+  bookFormYearInput.value = "";
+  bookFormIsCompleteInput.checked = false;
 
   const bookObject = {
     id: generateID,
@@ -31,23 +40,23 @@ const addBook = () => {
 const makeBook = (bookObject) => {
   const { id, title, author, year, isCompleted } = bookObject;
 
-  const textTitle = document.createElement("h3");
-  textTitle.setAttribute("data-testid", "bookItemTitle");
-  textTitle.innerText = title;
+  const bookTitle = document.createElement("h3");
+  bookTitle.setAttribute("data-testid", "bookItemTitle");
+  bookTitle.innerText = title;
 
-  const textAuthor = document.createElement("p");
-  textAuthor.setAttribute("data-testid", "bookItemAuthor");
-  textAuthor.innerText = author;
+  const bookAuthor = document.createElement("p");
+  bookAuthor.setAttribute("data-testid", "bookItemAuthor");
+  bookAuthor.innerText = author;
 
-  const textYear = document.createElement("p");
-  textYear.setAttribute("data-testid", "bookItemYear");
-  textYear.innerText = year;
+  const bookYear = document.createElement("p");
+  bookYear.setAttribute("data-testid", "bookItemYear");
+  bookYear.innerText = year;
 
   const isCompleteButton = document.createElement("button");
   isCompleteButton.setAttribute("data-testid", "bookItemIsCompleteButton");
 
   const deleteButton = document.createElement("button");
-  deleteButton.setAttribute("data-testid", "bookIteDeleteButton");
+  deleteButton.setAttribute("data-testid", "bookItemDeleteButton");
   deleteButton.innerText = "Hapus buku";
 
   const editButton = document.createElement("button");
@@ -60,7 +69,7 @@ const makeBook = (bookObject) => {
   const container = document.createElement("div");
   container.setAttribute("data-bookid", id);
   container.setAttribute("data-testid", "bookItem");
-  container.append(textTitle, textAuthor, textYear, buttonContainer);
+  container.append(bookTitle, bookAuthor, bookYear, buttonContainer);
 
   if (isCompleted === false) {
     isCompleteButton.innerText = "Selesai dibaca";
@@ -83,6 +92,59 @@ const makeBook = (bookObject) => {
 
   editButton.addEventListener("click", (event) => {
     event.preventDefault();
+
+    const editTitleLabel = document.createElement("label");
+    editTitleLabel.setAttribute("for", "bookFormTitle");
+    editTitleLabel.innerText = "Judul";
+
+    const editTextTitle = document.createElement("input");
+    editTextTitle.id = "bookFormTitle";
+    editTextTitle.setAttribute("type", "text");
+    editTextTitle.setAttribute("data-testid", "bookFormTitleInput");
+
+    const editTitleContainer = document.createElement("div");
+    editTitleContainer.append(editTitleLabel, editTextTitle);
+
+    const editAuthorLabel = document.createElement("label");
+    editAuthorLabel.setAttribute("for", "bookFormAuthor");
+    editAuthorLabel.innerText = "Penulis";
+
+    const editTextAuthor = document.createElement("input");
+    editTextAuthor.id = "bookFormAuthor";
+    editTextAuthor.setAttribute("type", "text");
+    editTextAuthor.setAttribute("data-testid", "bookFormAuthorInput");
+
+    const editAuthorContainer = document.createElement("div");
+    editAuthorContainer.append(editAuthorLabel, editTextAuthor);
+
+    const editYearLabel = document.createElement("label");
+    editYearLabel.setAttribute("for", "bookFormYear");
+    editYearLabel.innerText = "Tahun";
+
+    const editYear = document.createElement("input");
+    editYear.id = "bookFormYear";
+    editYear.setAttribute("type", "number");
+    editYear.setAttribute("data-testid", "bookFormYearInput");
+
+    const editYearContainer = document.createElement("div");
+    editYearContainer.append(editYearLabel, editYear);
+
+    const bookFormEdit = document.createElement("form");
+    bookFormEdit.id = "bookForm";
+    bookFormEdit.setAttribute("data-testid", "bookForm");
+    bookFormEdit.append(
+      editTitleContainer,
+      editAuthorContainer,
+      editYearContainer
+    );
+    console.log(bookFormEdit);
+
+    const siblingElement = editButton.nextElementSibling;
+    if (siblingElement) {
+      siblingElement.parentElement.insertBefore(bookFormEdit, siblingElement);
+    } else {
+      document.body.appendChild(bookFormEdit);
+    }
     editBook(id);
   });
 
@@ -118,11 +180,10 @@ const deleteBook = (bookId) => {
 };
 
 const editBook = (bookId) => {
-  const bookIndex = book.findIndex((bookItem) => bookItem.id === bookId);
-  if (bookIndex !== -1) {
-    book.splice(bookIndex, 1);
-    document.dispatchEvent(new Event(RENDER_EVENT));
+  const findIdBook = findBook(bookId);
+  if (findIdBook.id === bookId) {
   }
+  document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
 const searchBookList = () => {
