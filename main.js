@@ -2,7 +2,7 @@
 
 book = [];
 const RENDER_EVENT = "render-todo";
-console.log(book);
+const RENDER_EVENT_SEARCH = "renderSearch-todo";
 
 const generateId = () => {
   return +new Date();
@@ -62,8 +62,6 @@ const makeBook = (bookObject) => {
   container.setAttribute("data-testid", "bookItem");
   container.append(textTitle, textAuthor, textYear, buttonContainer);
 
-  console.log(container);
-
   if (isCompleted === false) {
     isCompleteButton.innerText = "Selesai dibaca";
     isCompleteButton.addEventListener("click", (event) => {
@@ -122,40 +120,34 @@ const deleteBook = (bookId) => {
 const searchBookList = () => {
   const searchBookList = document.getElementById("searchBook");
   const searchBookInput = document.getElementById("searchBookTitle");
+  const incompleteBookList = document.getElementById("incompleteBookList");
+  const completeBookList = document.getElementById("completeBookList");
+  const searchQuery = searchBookInput.value;
 
+  incompleteBookList.innerHTML = "";
+  completeBookList.innerHTML = "";
   searchBookInput.value = "";
 
-  console.log(`Input Search: ${searchBookInput.value}`);
+  console.log(`Input Search: ${searchQuery}`);
 
-  const searchResult = book.filter((bookItem) => {
-    return bookItem.title
-      .toLowerCase()
-      .includes(searchBookInput.value.toLowerCase());
+  const searchBook = book.filter((bookItem) => {
+    return bookItem.title.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  if (searchResult.length > 0) {
-    for (const result of searchResult) {
-      const resultElement = makeBook(result);
-      searchBookList.append(resultElement);
+  if (searchBook.length > 0) {
+    for (const bookItem of searchBook) {
+      const bookElement = makeBook(bookItem);
+      if (bookItem.isCompleted) {
+        completeBookList.append(bookElement);
+      } else {
+        incompleteBookList.append(bookElement);
+      }
     }
   } else {
     const noResultMessage = document.createElement("p");
+    noResultMessage.id = "bookSearchMessage";
     noResultMessage.innerText = "Buku tidak ditemukan.";
     searchBookList.append(noResultMessage);
-  }
-  document.dispatchEvent(new Event(RENDER_EVENT));
-};
-
-const editBook = (bookId) => {
-  const findIdBook = findBook(bookId);
-  if (findIdBook) {
-    document.getElementById("bookFormTitle").value = findIdBook.title;
-    document.getElementById("bookFormAuthor").value = findIdBook.author;
-    document.getElementById("bookFormYear").value = findIdBook.year;
-    document.getElementById("bookFormIsComplete").checked =
-      findIdBook.isCompleted;
-
-    deleteBook(bookId);
   }
 };
 
@@ -170,6 +162,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   searchSubmit.addEventListener("click", (event) => {
     event.preventDefault();
+    const bookSearchMessage = document.getElementById("bookSearchMessage");
+    if (bookSearchMessage) {
+      bookSearchMessage.innerHTML = "";
+    }
     searchBookList();
   });
 });
