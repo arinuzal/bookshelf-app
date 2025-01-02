@@ -98,7 +98,7 @@ const makeBook = (bookObject) => {
     editTitleLabel.innerText = "Judul";
 
     const editTextTitle = document.createElement("input");
-    editTextTitle.id = "bookFormTitle";
+    editTextTitle.id = "editBookFormTitle";
     editTextTitle.setAttribute("type", "text");
     editTextTitle.setAttribute("data-testid", "bookFormTitleInput");
 
@@ -110,7 +110,7 @@ const makeBook = (bookObject) => {
     editAuthorLabel.innerText = "Penulis";
 
     const editTextAuthor = document.createElement("input");
-    editTextAuthor.id = "bookFormAuthor";
+    editTextAuthor.id = "editBookFormAuthor";
     editTextAuthor.setAttribute("type", "text");
     editTextAuthor.setAttribute("data-testid", "bookFormAuthorInput");
 
@@ -122,21 +122,21 @@ const makeBook = (bookObject) => {
     editYearLabel.innerText = "Tahun";
 
     const editYear = document.createElement("input");
-    editYear.id = "bookFormYear";
+    editYear.id = "editBookFormYear";
     editYear.setAttribute("type", "number");
     editYear.setAttribute("data-testid", "bookFormYearInput");
 
     const editYearContainer = document.createElement("div");
     editYearContainer.append(editYearLabel, editYear);
 
-    const editFormSubmitButton = document.createElement("button")
-    editFormSubmitButton.id = "bookFormSubmit"
-    editFormSubmitButton.setAttribute("type", "submit")
-    editFormSubmitButton.setAttribute("data-testid", "bookFormSubmitButton")
-    editFormSubmitButton.innerText = "Selesai"
+    const editFormSubmitButton = document.createElement("button");
+    editFormSubmitButton.id = "editBookFormSubmit";
+    editFormSubmitButton.setAttribute("type", "submit");
+    editFormSubmitButton.setAttribute("data-testid", "bookFormSubmitButton");
+    editFormSubmitButton.innerText = "Selesai";
 
     const bookFormEdit = document.createElement("form");
-    bookFormEdit.id = "bookForm";
+    bookFormEdit.id = "editBookForm";
     bookFormEdit.setAttribute("data-testid", "bookForm");
     bookFormEdit.append(
       editTitleContainer,
@@ -144,15 +144,16 @@ const makeBook = (bookObject) => {
       editYearContainer,
       editFormSubmitButton
     );
-    console.log(bookFormEdit);
 
     editFormSubmitButton.addEventListener("click", (event) => {
-         event.preventDefault()
-         editTitleQuery = editTextTitle.value
-         editAuthorQuery = editTextAuthor.value
-         editYearQuery = editYear.value
-         editBook(id, editTitleQuery, editAuthorQuery, editYearQuery);
-    })
+      bookFormEdit.innerHTML = "";
+
+      event.preventDefault();
+      editTitleQuery = editTextTitle.value;
+      editAuthorQuery = editTextAuthor.value;
+      editYearQuery = editYear.value;
+      editBook(id, editTitleQuery, editAuthorQuery, editYearQuery);
+    });
     document.body.appendChild(bookFormEdit);
   });
 
@@ -190,9 +191,9 @@ const deleteBook = (bookId) => {
 const editBook = (bookId, editTitleQuery, editAuthorQuery, editYearQuery) => {
   const findIdBook = findBook(bookId);
   if (findIdBook.id === bookId) {
-    findIdBook.title= editTitleQuery
-    findIdBook.author= editAuthorQuery
-    findIdBook.year= editYearQuery
+    findIdBook.title = editTitleQuery;
+    findIdBook.author = editAuthorQuery;
+    findIdBook.year = editYearQuery;
   }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
@@ -227,6 +228,9 @@ const searchBookList = () => {
     noResultMessage.innerText = "Buku tidak ditemukan.";
     searchBookList.append(noResultMessage);
   }
+  if (bookSearchMessage) {
+    bookSearchMessage.innerHTML = "";
+  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -245,10 +249,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   searchSubmit.addEventListener("click", (event) => {
     event.preventDefault();
-    const bookSearchMessage = document.getElementById("bookSearchMessage");
-    if (bookSearchMessage) {
-      bookSearchMessage.innerHTML = "";
-    }
     searchBookList();
   });
 });
