@@ -129,23 +129,31 @@ const makeBook = (bookObject) => {
     const editYearContainer = document.createElement("div");
     editYearContainer.append(editYearLabel, editYear);
 
+    const editFormSubmitButton = document.createElement("button")
+    editFormSubmitButton.id = "bookFormSubmit"
+    editFormSubmitButton.setAttribute("type", "submit")
+    editFormSubmitButton.setAttribute("data-testid", "bookFormSubmitButton")
+    editFormSubmitButton.innerText = "Selesai"
+
     const bookFormEdit = document.createElement("form");
     bookFormEdit.id = "bookForm";
     bookFormEdit.setAttribute("data-testid", "bookForm");
     bookFormEdit.append(
       editTitleContainer,
       editAuthorContainer,
-      editYearContainer
+      editYearContainer,
+      editFormSubmitButton
     );
     console.log(bookFormEdit);
 
-    const siblingElement = editButton.nextElementSibling;
-    if (siblingElement) {
-      siblingElement.parentElement.insertBefore(bookFormEdit, siblingElement);
-    } else {
-      document.body.appendChild(bookFormEdit);
-    }
-    editBook(id);
+    editFormSubmitButton.addEventListener("click", (event) => {
+         event.preventDefault()
+         editTitleQuery = editTextTitle.value
+         editAuthorQuery = editTextAuthor.value
+         editYearQuery = editYear.value
+         editBook(id, editTitleQuery, editAuthorQuery, editYearQuery);
+    })
+    document.body.appendChild(bookFormEdit);
   });
 
   return container;
@@ -179,9 +187,12 @@ const deleteBook = (bookId) => {
   }
 };
 
-const editBook = (bookId) => {
+const editBook = (bookId, editTitleQuery, editAuthorQuery, editYearQuery) => {
   const findIdBook = findBook(bookId);
   if (findIdBook.id === bookId) {
+    findIdBook.title= editTitleQuery
+    findIdBook.author= editAuthorQuery
+    findIdBook.year= editYearQuery
   }
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
