@@ -209,6 +209,11 @@ const searchBookList = () => {
   completeBookList.innerHTML = "";
   searchBookInput.value = "";
 
+  const existingMessage = document.getElementById("bookSearchMessage");
+  if (existingMessage) {
+    existingMessage.remove()
+  }
+
   const searchBook = book.filter((bookItem) => {
     return bookItem.title.toLowerCase().includes(searchQuery.toLowerCase());
   });
@@ -227,9 +232,6 @@ const searchBookList = () => {
     noResultMessage.id = "bookSearchMessage";
     noResultMessage.innerText = "Buku tidak ditemukan.";
     searchBookList.append(noResultMessage);
-  }
-  if (bookSearchMessage) {
-    bookSearchMessage.innerHTML = "";
   }
 };
 
