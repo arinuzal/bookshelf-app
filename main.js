@@ -159,7 +159,8 @@ const makeBook = (bookObject) => {
       editYearQuery = editYear.value;
       editBook(id, editTitleQuery, editAuthorQuery, editYearQuery);
     });
-    document.body.appendChild(bookFormEdit);
+    const mainElement = document.querySelector("main");
+    mainElement.appendChild(bookFormEdit);
   });
 
   return container;
