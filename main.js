@@ -35,7 +35,7 @@ const addBook = () => {
   };
 
   book.push(bookObject);
-  saveBook()
+  saveBook();
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -137,7 +137,10 @@ const makeBook = (bookObject) => {
     const editFormSubmitButton = document.createElement("button");
     editFormSubmitButton.id = "editBookFormSubmit";
     editFormSubmitButton.setAttribute("type", "submit");
-    editFormSubmitButton.setAttribute("data-testid", "editBookFormSubmitButton");
+    editFormSubmitButton.setAttribute(
+      "data-testid",
+      "editBookFormSubmitButton"
+    );
     editFormSubmitButton.innerText = "Selesai";
 
     const bookFormEdit = document.createElement("form");
@@ -175,7 +178,7 @@ const isCompleteBook = (bookId) => {
   if (findIdBook.id === bookId) {
     findIdBook.isCompleted = true;
   }
-  saveBook()
+  saveBook();
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -184,20 +187,22 @@ const isNotCompleteBook = (bookId) => {
   if (findIdBook.id === bookId) {
     findIdBook.isCompleted = false;
   }
-  saveBook()
+  saveBook();
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
 const deleteBook = (bookId) => {
-  const editBookForm = document.getElementById("editBookForm")
-  editBookForm.remove()
+  const existingEditForm = document.getElementById("editBookForm");
+  if (existingEditForm) {
+    existingEditForm.remove();
+  }
 
   const bookIndex = book.findIndex((bookItem) => bookItem.id === bookId);
   if (bookIndex !== -1) {
     book.splice(bookIndex, 1);
     document.dispatchEvent(new Event(RENDER_EVENT));
   }
-  saveBook()
+  saveBook();
 };
 
 const editBook = (bookId, editTitleQuery, editAuthorQuery, editYearQuery) => {
@@ -207,7 +212,7 @@ const editBook = (bookId, editTitleQuery, editAuthorQuery, editYearQuery) => {
     findIdBook.author = editAuthorQuery;
     findIdBook.year = editYearQuery;
   }
-  saveBook()
+  saveBook();
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -224,7 +229,7 @@ const searchBookList = () => {
 
   const existingMessage = document.getElementById("bookSearchMessage");
   if (existingMessage) {
-    existingMessage.remove()
+    existingMessage.remove();
   }
 
   const searchBook = book.filter((bookItem) => {
@@ -249,24 +254,24 @@ const searchBookList = () => {
 };
 
 const isStorageExist = () => {
-  if (typeof (Storage) === undefined) {
-    alert ("Browser anda tidak mendukung local storage");
-    return false
+  if (typeof Storage === undefined) {
+    alert("Browser anda tidak mendukung local storage");
+    return false;
   }
-  return true
-}
+  return true;
+};
 
 const saveBook = () => {
-   if (isStorageExist()) {
-     const dataParsed =  JSON.stringify(book);
-     localStorage.setItem(STORAGE_KEY, dataParsed);
-     document.dispatchEvent(new Event(SAVED_BOOK_EVENT));
-   }
-}
+  if (isStorageExist()) {
+    const dataParsed = JSON.stringify(book);
+    localStorage.setItem(STORAGE_KEY, dataParsed);
+    document.dispatchEvent(new Event(SAVED_BOOK_EVENT));
+  }
+};
 
 const loadDataFromStorage = () => {
-  const getBook = localStorage.getItem(STORAGE_KEY)
-  let data = JSON.parse(getBook)
+  const getBook = localStorage.getItem(STORAGE_KEY);
+  let data = JSON.parse(getBook);
 
   if (data !== null) {
     for (bookData of data) {
@@ -274,7 +279,7 @@ const loadDataFromStorage = () => {
     }
   }
   document.dispatchEvent(new Event(RENDER_EVENT));
-}
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   const submitForm = document.getElementById("bookForm");
@@ -296,13 +301,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   if (isStorageExist()) {
-      loadDataFromStorage()
+    loadDataFromStorage();
   }
 });
 
 document.addEventListener(SAVED_BOOK_EVENT, () => {
-  console.log(localStorage.getItem(STORAGE_KEY))
-})
+  console.log(localStorage.getItem(STORAGE_KEY));
+});
 
 document.addEventListener(RENDER_EVENT, () => {
   const incompleteBookList = document.getElementById("incompleteBookList");
