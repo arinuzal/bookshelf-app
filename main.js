@@ -1,8 +1,9 @@
 // Do your work here...
 
 book = [];
-const RENDER_EVENT = "render-todo";
-const RENDER_EVENT_SEARCH = "renderSearch-todo";
+const RENDER_EVENT = "render-book";
+const SAVED_BOOK_EVENT = "saved-book";
+const STORAGE_KEY = "BOOK_APPS";
 
 const generateId = () => {
   return +new Date();
@@ -34,6 +35,7 @@ const addBook = () => {
   };
 
   book.push(bookObject);
+  saveBook()
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -94,37 +96,40 @@ const makeBook = (bookObject) => {
     event.preventDefault();
 
     const editTitleLabel = document.createElement("label");
-    editTitleLabel.setAttribute("for", "bookFormTitle");
+    editTitleLabel.setAttribute("for", "editBookFormTitle");
     editTitleLabel.innerText = "Judul";
 
     const editTextTitle = document.createElement("input");
     editTextTitle.id = "editBookFormTitle";
     editTextTitle.setAttribute("type", "text");
-    editTextTitle.setAttribute("data-testid", "bookFormTitleInput");
+    editTextTitle.setAttribute("required", "");
+    editTextTitle.setAttribute("data-testid", "editBookFormTitleInput");
 
     const editTitleContainer = document.createElement("div");
     editTitleContainer.append(editTitleLabel, editTextTitle);
 
     const editAuthorLabel = document.createElement("label");
-    editAuthorLabel.setAttribute("for", "bookFormAuthor");
+    editAuthorLabel.setAttribute("for", "editBookFormAuthor");
     editAuthorLabel.innerText = "Penulis";
 
     const editTextAuthor = document.createElement("input");
     editTextAuthor.id = "editBookFormAuthor";
     editTextAuthor.setAttribute("type", "text");
-    editTextAuthor.setAttribute("data-testid", "bookFormAuthorInput");
+    editTextAuthor.setAttribute("required", "");
+    editTextAuthor.setAttribute("data-testid", "editBookFormAuthorInput");
 
     const editAuthorContainer = document.createElement("div");
     editAuthorContainer.append(editAuthorLabel, editTextAuthor);
 
     const editYearLabel = document.createElement("label");
-    editYearLabel.setAttribute("for", "bookFormYear");
+    editYearLabel.setAttribute("for", "editBookFormYear");
     editYearLabel.innerText = "Tahun";
 
     const editYear = document.createElement("input");
     editYear.id = "editBookFormYear";
     editYear.setAttribute("type", "number");
-    editYear.setAttribute("data-testid", "bookFormYearInput");
+    editYear.setAttribute("required", "");
+    editYear.setAttribute("data-testid", "editBookFormYearInput");
 
     const editYearContainer = document.createElement("div");
     editYearContainer.append(editYearLabel, editYear);
@@ -132,7 +137,7 @@ const makeBook = (bookObject) => {
     const editFormSubmitButton = document.createElement("button");
     editFormSubmitButton.id = "editBookFormSubmit";
     editFormSubmitButton.setAttribute("type", "submit");
-    editFormSubmitButton.setAttribute("data-testid", "bookFormSubmitButton");
+    editFormSubmitButton.setAttribute("data-testid", "editBookFormSubmitButton");
     editFormSubmitButton.innerText = "Selesai";
 
     const bookFormEdit = document.createElement("form");
@@ -169,6 +174,7 @@ const isCompleteBook = (bookId) => {
   if (findIdBook.id === bookId) {
     findIdBook.isCompleted = true;
   }
+  saveBook()
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -177,15 +183,20 @@ const isNotCompleteBook = (bookId) => {
   if (findIdBook.id === bookId) {
     findIdBook.isCompleted = false;
   }
+  saveBook()
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
 const deleteBook = (bookId) => {
+  const editBookForm = document.getElementById("editBookForm")
+  editBookForm.remove()
+
   const bookIndex = book.findIndex((bookItem) => bookItem.id === bookId);
   if (bookIndex !== -1) {
     book.splice(bookIndex, 1);
     document.dispatchEvent(new Event(RENDER_EVENT));
   }
+  saveBook()
 };
 
 const editBook = (bookId, editTitleQuery, editAuthorQuery, editYearQuery) => {
@@ -195,6 +206,7 @@ const editBook = (bookId, editTitleQuery, editAuthorQuery, editYearQuery) => {
     findIdBook.author = editAuthorQuery;
     findIdBook.year = editYearQuery;
   }
+  saveBook()
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -235,6 +247,34 @@ const searchBookList = () => {
   }
 };
 
+const isStorageExist = () => {
+  if (typeof (Storage) === undefined) {
+    alert ("Browser anda tidak mendukung local storage");
+    return false
+  }
+  return true
+}
+
+const saveBook = () => {
+   if (isStorageExist()) {
+     const dataParsed =  JSON.stringify(book);
+     localStorage.setItem(STORAGE_KEY, dataParsed);
+     document.dispatchEvent(new Event(SAVED_BOOK_EVENT));
+   }
+}
+
+const loadDataFromStorage = () => {
+  const getBook = localStorage.getItem(STORAGE_KEY)
+  let data = JSON.parse(getBook)
+
+  if (data !== null) {
+    for (bookData of data) {
+      book.push(bookData);
+    }
+  }
+  document.dispatchEvent(new Event(RENDER_EVENT));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const submitForm = document.getElementById("bookForm");
   const searchSubmit = document.getElementById("searchSubmit");
@@ -253,7 +293,15 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     searchBookList();
   });
+
+  if (isStorageExist()) {
+      loadDataFromStorage()
+  }
 });
+
+document.addEventListener(SAVED_BOOK_EVENT, () => {
+  console.log(localStorage.getItem(STORAGE_KEY))
+})
 
 document.addEventListener(RENDER_EVENT, () => {
   const incompleteBookList = document.getElementById("incompleteBookList");
