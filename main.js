@@ -26,6 +26,11 @@ const addBook = () => {
   bookFormYearInput.value = "";
   bookFormIsCompleteInput.checked = false;
 
+  if (bookFormTitle.length <= 1 || bookFormAuthor.length <= 1 || bookFormYear.length <= 1) {
+      alert("Diharapkan mengisi dengan benar!!!")
+      return
+  }
+
   const bookObject = {
     id: generateID,
     title: bookFormTitle,
@@ -95,6 +100,9 @@ const makeBook = (bookObject) => {
   editButton.addEventListener("click", (event) => {
     event.preventDefault();
 
+    const editBook = document.createElement("h2")
+    editBook.innerText = "Edit Buku"
+
     const editTitleLabel = document.createElement("label");
     editTitleLabel.setAttribute("for", "editBookFormTitle");
     editTitleLabel.innerText = "Judul";
@@ -147,6 +155,7 @@ const makeBook = (bookObject) => {
     bookFormEdit.id = "editBookForm";
     bookFormEdit.setAttribute("data-testid", "bookForm");
     bookFormEdit.append(
+      editBook,
       editTitleContainer,
       editAuthorContainer,
       editYearContainer,
@@ -195,7 +204,7 @@ const deleteBook = (bookId) => {
   const existingEditForm = document.getElementById("editBookForm");
   if (existingEditForm) {
     existingEditForm.remove();
-  }
+  }  
 
   const bookIndex = book.findIndex((bookItem) => bookItem.id === bookId);
   if (bookIndex !== -1) {
@@ -292,6 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   submitForm.addEventListener("submit", (event) => {
     event.preventDefault();
+
     addBook();
   });
 
