@@ -1,5 +1,3 @@
-// Do your work here...
-
 book = [];
 const RENDER_EVENT = "render-book";
 const SAVED_BOOK_EVENT = "saved-book";
@@ -27,7 +25,7 @@ const addBook = () => {
   bookFormIsCompleteInput.checked = false;
 
   if (bookFormTitle.length <= 1 || bookFormAuthor.length <= 1 || bookFormYear.length <= 1) {
-      alert("Diharapkan mengisi dengan benar!!!")
+      alert("Harap mengisi dengan benar!!!")
       return
   }
 

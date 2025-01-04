@@ -142,8 +142,15 @@ label {
   justify-content: flex-end;
 }
 
+[data-testid="bookItemDeleteButton"] {
+  background-color: rgb(224, 21, 21);
+}
+
+[data-testid="bookItemDeleteButton"]:hover {
+  background-color: rgb(167, 29, 29);
+}
+
 [data-testid="bookItem"] button {
-  background-color: #6200ea;
   color: #fff;
   border: none;
   padding: 0.5rem 1rem;
@@ -153,6 +160,18 @@ label {
   transition: background-color 0.3s ease;
 }
 
-[data-testid="bookItem"] button:hover {
-  background-color: #3700b3;
+@media (min-width: 1024px) {
+  .wrapperBook {
+    flex-direction: row;
+  }
+
+  main {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .wrapperBook {
+    flex-direction: column;
+  }
 }
