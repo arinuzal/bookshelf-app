@@ -16,7 +16,7 @@ const addBook = () => {
 
   const bookFormTitle = bookFormTitleInput.value;
   const bookFormAuthor = bookFormAuthorInput.value;
-  const bookFormYear = bookFormYearInput.value;
+  const bookFormYear = parseInt(bookFormYearInput.value, 10); 
   const bookFormIsComplete = bookFormIsCompleteInput.checked;
 
   bookFormTitleInput.value = "";
@@ -24,9 +24,13 @@ const addBook = () => {
   bookFormYearInput.value = "";
   bookFormIsCompleteInput.checked = false;
 
-  if (bookFormTitle.length <= 1 || bookFormAuthor.length <= 1 || bookFormYear.length <= 1) {
-      alert("Harap mengisi dengan benar!!!")
-      return
+  if (
+    bookFormTitle.length <= 1 ||
+    bookFormAuthor.length <= 1 ||
+    isNaN(bookFormYear)
+  ) {
+    alert("Harap mengisi dengan benar!!!");
+    return;
   }
 
   const bookObject = {
@@ -34,7 +38,7 @@ const addBook = () => {
     title: bookFormTitle,
     author: bookFormAuthor,
     year: bookFormYear,
-    isCompleted: bookFormIsComplete,
+    isComplete: bookFormIsComplete,
   };
 
   book.push(bookObject);
@@ -43,7 +47,7 @@ const addBook = () => {
 };
 
 const makeBook = (bookObject) => {
-  const { id, title, author, year, isCompleted } = bookObject;
+  const { id, title, author, year, isComplete } = bookObject;
 
   const bookTitle = document.createElement("h3");
   bookTitle.setAttribute("data-testid", "bookItemTitle");
@@ -76,7 +80,7 @@ const makeBook = (bookObject) => {
   container.setAttribute("data-testid", "bookItem");
   container.append(bookTitle, bookAuthor, bookYear, buttonContainer);
 
-  if (isCompleted === false) {
+  if (isComplete === false) {
     isCompleteButton.innerText = "Selesai dibaca";
     isCompleteButton.addEventListener("click", (event) => {
       event.preventDefault();
@@ -98,7 +102,7 @@ const makeBook = (bookObject) => {
   editButton.addEventListener("click", (event) => {
     event.preventDefault();
 
-    const editBook = document.createElement("h2")
+    const editBookTitle = document.createElement("h2")
     editBook.innerText = "Edit Buku"
 
     const editTitleLabel = document.createElement("label");
@@ -153,7 +157,7 @@ const makeBook = (bookObject) => {
     bookFormEdit.id = "editBookForm";
     bookFormEdit.setAttribute("data-testid", "bookForm");
     bookFormEdit.append(
-      editBook,
+      editBookTitle,
       editTitleContainer,
       editAuthorContainer,
       editYearContainer,
@@ -183,7 +187,7 @@ const findBook = (bookId) => {
 const isCompleteBook = (bookId) => {
   const findIdBook = findBook(bookId);
   if (findIdBook.id === bookId) {
-    findIdBook.isCompleted = true;
+    findIdBook.isComplete = true;
   }
   saveBook();
   document.dispatchEvent(new Event(RENDER_EVENT));
@@ -192,7 +196,7 @@ const isCompleteBook = (bookId) => {
 const isNotCompleteBook = (bookId) => {
   const findIdBook = findBook(bookId);
   if (findIdBook.id === bookId) {
-    findIdBook.isCompleted = false;
+    findIdBook.isComplete = false;
   }
   saveBook();
   document.dispatchEvent(new Event(RENDER_EVENT));
@@ -246,7 +250,7 @@ const searchBookList = () => {
   if (searchBook.length > 0) {
     for (const bookItem of searchBook) {
       const bookElement = makeBook(bookItem);
-      if (bookItem.isCompleted) {
+      if (bookItem.isComplete) {
         completeBookList.append(bookElement);
       } else {
         incompleteBookList.append(bookElement);
@@ -326,7 +330,7 @@ document.addEventListener(RENDER_EVENT, () => {
 
   for (bookItem of book) {
     const bookElement = makeBook(bookItem);
-    if (bookItem.isCompleted) {
+    if (bookItem.isComplete) {
       completeBookList.append(bookElement);
     } else {
       incompleteBookList.append(bookElement);
