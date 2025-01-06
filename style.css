@@ -1,16 +1,15 @@
-html,
-body {
+html, body {
   box-sizing: border-box;
   padding: 0;
-  margin: 9;
+  margin: 0;
 }
 
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
-  color: #333;
+  background-color: #121212; 
+  color: #e0e0e0; 
   line-height: 1.6;
 }
 
@@ -22,11 +21,15 @@ main {
 }
 
 header {
-  background-color: #6200ea;
-  color: #fff;
+  background-color: #1f1b24; 
+  color: #bb86fc; 
   padding: 1rem 2rem;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+span {
+  color: #03dac6; 
 }
 
 header h1 {
@@ -35,16 +38,16 @@ header h1 {
 }
 
 .searchBook {
-  background-color: #fff;
+  background-color: #1e1e1e;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   margin-bottom: 2rem;
 }
 
 .searchBook h2 {
   margin-bottom: 1rem;
-  color: #6200ea;
+  color: #bb86fc; 
   font-size: 1.5rem;
 }
 
@@ -57,14 +60,17 @@ form {
 input[type="text"],
 input[type="number"] {
   padding: 0.8rem;
-  border: 1px solid #ccc;
+  border: 1px solid #333333; 
   border-radius: 4px;
   font-size: 1rem;
+  background-color: #292929; 
+  color: #e0e0e0; 
 }
 
 button {
-  background-color: #6200ea;
-  color: #fff;
+  /* background-color: #bb86fc; */
+  background-color: #1c0834;
+  color: #fff; 
   padding: 0.8rem;
   border: none;
   border-radius: 4px;
@@ -74,8 +80,12 @@ button {
 }
 
 button:hover {
-  background-color: #3700b3;
+  background-color: #9f63e6; 
 }
+
+/* .textButtonSubmit {
+  color: #fff;
+} */
 
 form div {
   display: flex;
@@ -85,7 +95,7 @@ form div {
 label {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
-  color: #555;
+  color: #b0b0b0; 
 }
 
 .wrapperBook {
@@ -96,16 +106,16 @@ label {
 
 .wrapperBook section {
   flex: 1;
-  background-color: #fff;
+  background-color: #1e1e1e;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
- h2 {
+h2 {
   margin-bottom: 1rem;
   font-size: 1.5rem;
-  color: #6200ea;
+  color: #bb86fc; 
 }
 
 #incompleteBookList,
@@ -116,24 +126,24 @@ label {
 }
 
 [data-testid="bookItem"] {
-  background-color: #f9f9f9;
+  background-color: #292929; 
   padding: 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid #333333; 
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
 }
 
 [data-testid="bookItem"] h3 {
   font-size: 1.2rem;
-  color: #333;
+  color: #e0e0e0; 
 }
 
 [data-testid="bookItem"] p {
   font-size: 0.9rem;
-  color: #555;
+  color: #b0b0b0; 
 }
 
 [data-testid="bookItem"] div {
@@ -143,15 +153,15 @@ label {
 }
 
 [data-testid="bookItemDeleteButton"] {
-  background-color: rgb(224, 21, 21);
+  background-color: #cf6679; 
 }
 
 [data-testid="bookItemDeleteButton"]:hover {
-  background-color: rgb(167, 29, 29);
+  background-color: #b25163; 
 }
 
 [data-testid="bookItem"] button {
-  color: #fff;
+  color: #121212; 
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
