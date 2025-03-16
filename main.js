@@ -102,6 +102,14 @@ const makeBook = (bookObject) => {
   editButton.addEventListener("click", (event) => {
     event.preventDefault();
 
+    if (document.getElementById("editBookForm")) {
+      return;
+    }
+
+    editButton.disabled = true;
+
+    const bookToEdit = findBook(id);
+
     const editBookTitle = document.createElement("h2")
     editBook.innerText = "Edit Buku"
 
@@ -114,6 +122,8 @@ const makeBook = (bookObject) => {
     editTextTitle.setAttribute("type", "text");
     editTextTitle.setAttribute("required", "");
     editTextTitle.setAttribute("data-testid", "editBookFormTitleInput");
+    editTextTitle.value = bookToEdit.title; 
+
 
     const editTitleContainer = document.createElement("div");
     editTitleContainer.append(editTitleLabel, editTextTitle);
@@ -127,6 +137,7 @@ const makeBook = (bookObject) => {
     editTextAuthor.setAttribute("type", "text");
     editTextAuthor.setAttribute("required", "");
     editTextAuthor.setAttribute("data-testid", "editBookFormAuthorInput");
+    editTextAuthor.value = bookToEdit.author;
 
     const editAuthorContainer = document.createElement("div");
     editAuthorContainer.append(editAuthorLabel, editTextAuthor);
@@ -140,6 +151,7 @@ const makeBook = (bookObject) => {
     editYear.setAttribute("type", "number");
     editYear.setAttribute("required", "");
     editYear.setAttribute("data-testid", "editBookFormYearInput");
+    editYear.value = bookToEdit.year;
 
     const editYearContainer = document.createElement("div");
     editYearContainer.append(editYearLabel, editYear);
@@ -151,7 +163,7 @@ const makeBook = (bookObject) => {
       "data-testid",
       "editBookFormSubmitButton"
     );
-    editFormSubmitButton.innerText = "Selesai";
+    editFormSubmitButton.innerText = "Simpan";
 
     const bookFormEdit = document.createElement("form");
     bookFormEdit.id = "editBookForm";
@@ -172,6 +184,10 @@ const makeBook = (bookObject) => {
       editAuthorQuery = editTextAuthor.value;
       editYearQuery = editYear.value;
       editBook(id, editTitleQuery, editAuthorQuery, editYearQuery);
+
+      bookFormEdit.remove();
+
+      editButton.disabled = false;
     });
     const mainElement = document.querySelector("main");
     mainElement.appendChild(bookFormEdit);
@@ -303,7 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   submitForm.addEventListener("submit", (event) => {
     event.preventDefault();
-
     addBook();
   });
 
